@@ -7,10 +7,15 @@
 <h1>Home Page</h1>
 
 <div>
+  <a href="{% url 'createGroup' %}">Create a Group</a>
   <h2>Group -- Name</h2>
   {% for group in groups %}
+  <div>
+    <span>@{{group.groupCreator.username}}</span> 
     <h5>{{ group.id}} -- <a href="{% url 'group' group.id %}">{{group.name}}</a></h5>  <!-- href => Refers to name= in urls.py so you do not have to change anything if url path changes-->
-  {% endfor %}
+    <hr>
+  </div>
+    {% endfor %}
 </div>
 
 {% endblock content %}

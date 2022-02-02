@@ -1,6 +1,7 @@
 from multiprocessing import context
 from django.shortcuts import render
 from .models import *
+from .forms import *
 
 # Create your views here.
 
@@ -20,4 +21,8 @@ def group(request, pk):
   context = {'group': group}
   return render(request, 'snapp/group.html', context)
 
-  
+def createGroup(request):
+  context = {}
+  return render(request, 'snapp/group_form.html', context)
+
+

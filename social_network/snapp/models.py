@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Group(models.Model):
-  creator = models.ForeignKey(User, on_delete=models.CASCADE)
+  groupCreator = models.ForeignKey(User, on_delete=models.CASCADE)
   name = models.CharField(max_length=200)
   description = models.TextField(null=True, blank=True) # use TextField for large amounts of text, null=True -> can be null, blank=True -> if any form on page - field can be blank# If you allow for blank values, you have to allow for null values since blank values are stored as null.
   # members = 
@@ -24,4 +24,4 @@ class Message(models.Model):
   dateCreated = models.DateTimeField(auto_now_add=True) 
 
   def __str__(self):
-    return self.message[0:50] # if the message is too long, truncate it
+    return self.message[0:40] # if the message is too long, truncate the text
