@@ -10,6 +10,7 @@
 <div>
   <form method="POST" action="">
     {% csrf_token %}  <!-- prevent against malicious attacks -->
+    {{ form.as_p }} <!-- wraps p tag around every paragraph-->
     <input type="submit" value="Submit" />
   </form>
 </div>

@@ -22,7 +22,19 @@ def group(request, pk):
   return render(request, 'snapp/group.html', context)
 
 def createGroup(request):
-  context = {}
-  return render(request, 'snapp/group_form.html', context)
+  form = GroupForm()
+  if request.method == 'POST': # if user sent info
+    form = GroupForm(request.POST)  # populated with the data that the user sent
+    if form.is_valid(): # validate the data
+      ec = EC() # add new row to ec table
+      ec.ec_name = form.cleaned_data['ec_name']
+      ec.save()
+      return HttpResponseRedirect('/create_ec/')
+    else:
+      ecs = EC.objects.all()
+      form = ECForm() # blank form
+      return render(request, 'genedata/ec.html', {'form': form, 'ecs': ecs, 'master_genes': master_genes})
+      context = {'form': form}
+      return render(request, 'snapp/group_form.html', context)
 
 
