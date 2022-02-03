@@ -25,7 +25,7 @@
     <a href="{% url 'deleteGroup' group.id %}">Delete</a>
     {% endif %}
   </div>
-    <a href="{% url 'profile' group.groupCreator.id %}">@{{group.groupCreator.username}}</a> 
+    <a href="{% url 'user-profile' group.groupCreator.id %}">@{{group.groupCreator.username}}</a> 
     <h5>{{ group.id}} -- <a href="{% url 'group' group.id %}">{{group.name}}</a></h5>  <!-- href => Refers to name= in urls.py so you do not have to change anything if url path changes-->
     <hr>
   </div>

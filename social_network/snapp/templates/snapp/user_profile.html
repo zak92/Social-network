@@ -9,6 +9,9 @@
 <h1>{{user.username}}</h1>
 
 <div>
+  {% if request.user == user %}
+  <a href="{% url 'updateProfile' %}">Update Profile</a>
+  {% endif %}
   <div>
     <h5>{{group_count}} groups active</h5>
     <a href="{% url 'createGroup' %}">Create a Group</a>

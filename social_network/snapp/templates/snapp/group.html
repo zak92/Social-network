@@ -16,7 +16,7 @@
     {% if request.user == message.user %}
     <a href="{% url 'deleteMessage' message.id %}">Delete</a>
     {% endif %}
-    <small><a  href="{% url 'profile' message.user.id %}">@{{message.user}}</a>   {{message.dateCreated|timesince}} ago</small>
+    <small><a  href="{% url 'user-profile' message.user.id %}">@{{message.user}}</a>   {{message.dateCreated|timesince}} ago</small>
     <p>{{message.message}}</p>
   </div>
   {% endfor %}
@@ -37,7 +37,7 @@
 {% for user in members %}
 <div>
   <ul>
-    <li><a href="{% url 'profile' user.id %}">@{{user.username}}</a></li>
+    <li><a href="{% url 'user-profile' user.id %}">@{{user.username}}</a></li>
   </ul>
 </div>
 {% endfor %}

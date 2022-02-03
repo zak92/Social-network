@@ -15,7 +15,7 @@ from .forms import *
 def userLogin(request):
   page = 'login'
   if request.user.is_authenticated:  # cant go to login page
-    return redirect('userProfile')
+    return redirect('home')
 
   if request.method == 'POST': # if user sent info
     username = request.POST.get('username').lower()  # populated with the data that the user sent
@@ -30,7 +30,7 @@ def userLogin(request):
 
     if user is not None:
       login(request, user) # activate session - user is logged in
-      return redirect('userProfile')
+      return redirect('home')
     else:
       messages.error(request, 'Incorrect username or password')
 
@@ -51,16 +51,16 @@ def userSignUp(request):
       user.username = user.username.lower() # username must be in lowercase
       user.save()
       login(request, user) # log user in immediately
-      return redirect('userProfile')
+      return redirect('home')
      else:
       messages.error(request, 'Error in user registration / sign up')
   context = {'form': form}
   return render(request, 'snapp/index.html', context)
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def userProfile(request, pk):
   user = User.objects.get(id=pk)
-  groups = user.group_set.all().order_by('-dateCreated') 
+  groups = user.group_set.all() #.order_by('-dateCreated') 
   group_messages = user.message_set.all()
   context = {'user': user, 'groups':groups, 'group_messages': group_messages}
   return render(request, 'snapp/user_profile.html', context)
@@ -105,7 +105,9 @@ def createGroup(request):
   if request.method == 'POST': # if user sent info
     form = GroupForm(request.POST)  # populated with the data that the user sent
     if form.is_valid(): # validate the data
-      form.save()
+      group = form.save(commit=False)
+      group.groupCreator = request.user
+      group.save()
       return redirect('home')
   context = {'form': form}
   return render(request, 'snapp/group_form.html', context)
@@ -150,5 +152,17 @@ def deleteMessage(request, pk):
     message.delete()
     return redirect('home')
   return render(request, 'snapp/delete.html', {'obj': message})
+
+@login_required(login_url='login')
+def updateProfile(request):
+  user = request.user
+  form = UserProfileForm(instance=user)
+  if request.method == 'POST': # if user sent info
+    form = UserProfileForm(request.POST, instance=user)  # populated with the data that the user sent - update a room, do not create a new one
+    if form.is_valid(): # validate the data
+      form.save()
+      return redirect('user-profile', pk=user.id)
+  context = {'form': form}
+  return render(request, 'snapp/user_profile_settings.html', context)
 
 

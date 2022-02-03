@@ -6,4 +6,16 @@
 
 <h1>User Profile Settings Page</h1>
 
+<form method="POST" action="">
+  {% csrf_token %}
+  <!-- {{form.as_p}} do not use this if you have new fields in the user model-->
+  {% for field in form %}
+  
+  <label for="profile-image">{{field.label}}</label>
+ {{field}}
+  {% endfor %}
+  <a href="">Cancel</a>
+  <input type="submit" value="Update" />
+</form>
+
 {% endblock content %}

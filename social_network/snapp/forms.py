@@ -7,3 +7,9 @@ class GroupForm(ModelForm):
   class Meta:
     model = Group
     fields = '__all__'
+    exclude = ['groupCreator', 'members']
+
+class UserProfileForm(ModelForm):
+  class Meta:
+    model = User
+    fields = ['username', 'email']
