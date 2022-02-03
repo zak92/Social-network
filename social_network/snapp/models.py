@@ -8,7 +8,7 @@ class Group(models.Model):
   groupCreator = models.ForeignKey(User, on_delete=models.CASCADE)
   name = models.CharField(max_length=200)
   description = models.TextField(null=True, blank=True) # use TextField for large amounts of text, null=True -> can be null, blank=True -> if any form on page - field can be blank# If you allow for blank values, you have to allow for null values since blank values are stored as null.
-  # members = 
+  members = models.ManyToManyField(User, related_name='members', blank=True) # since you already have user in Group creator -> use related_name, blank form allowed
   lastUpdated = models.DateTimeField(auto_now=True) # automatic - last updated 
   dateCreated = models.DateTimeField(auto_now_add=True) # when it was first created - initial timestamp - will never change
 

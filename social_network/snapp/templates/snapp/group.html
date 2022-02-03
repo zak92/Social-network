@@ -6,6 +6,40 @@
 
 <h1>{{group.name}}</h1>
 
- 
+<h3>{{group.description}}</h3>
+
+<div>
+  <h2>Conversation</h2>
+  <hr>
+  {% for message in groupMessages %}
+  <div>
+    {% if request.user == message.user %}
+    <a href="{% url 'deleteMessage' message.id %}">Delete</a>
+    {% endif %}
+    <small><a  href="{% url 'profile' message.user.id %}">@{{message.user}}</a>   {{message.dateCreated|timesince}} ago</small>
+    <p>{{message.message}}</p>
+  </div>
+  {% endfor %}
+</div>
+
+{% if request.user.is_authenticated %}
+<div>
+  <form method="POST" action="">
+    {% csrf_token %}  <!-- prevent against malicious attacks -->
+    {{ form.as_p }} <!-- wraps p tag around every paragraph-->
+    <input type="text" name="messageBody" placeholder="Write a message...."  />
+  </form>
+</div>
+{% endif %}
+
+<h3>Members</h3>
+<!-- Members of the group -->
+{% for user in members %}
+<div>
+  <ul>
+    <li><a href="{% url 'profile' user.id %}">@{{user.username}}</a></li>
+  </ul>
+</div>
+{% endfor %}
 
 {% endblock content %}
