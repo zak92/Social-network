@@ -12,6 +12,9 @@ class Group(models.Model):
   lastUpdated = models.DateTimeField(auto_now=True) # automatic - last updated 
   dateCreated = models.DateTimeField(auto_now_add=True) # when it was first created - initial timestamp - will never change
 
+  class Meta:
+    ordering = ['-lastUpdated', '-dateCreated'] # show the last created / updated group at the top of the page
+
   def __str__(self):
     return self.name
 

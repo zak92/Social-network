@@ -2,15 +2,29 @@
 
 {% block content %}
 
-{% include 'navbar.html' %}
+
 
 <h1>Home Page</h1>
 
+<form method="GET" action="{% url 'home' %}">
+  {% csrf_token %}  <!-- prevent against malicious attacks -->
+  {{ form.as_p }} <!-- wraps p tag around every paragraph-->
+  <input type="text"  name="q" placeholder="Search groups. . . "/>
+</form>
+
 <div>
+  <h5>{{group_count}} groups active</h5>
   <a href="{% url 'createGroup' %}">Create a Group</a>
   <h2>Group -- Name</h2>
+
   {% for group in groups %}
   <div>
+    <div>
+    {% if request.user == group.groupCreator %}
+    <a href="{% url 'updateGroup' group.id %}">Edit</a>
+    <a href="{% url 'deleteGroup' group.id %}">Delete</a>
+    {% endif %}
+  </div>
     <span>@{{group.groupCreator.username}}</span> 
     <h5>{{ group.id}} -- <a href="{% url 'group' group.id %}">{{group.name}}</a></h5>  <!-- href => Refers to name= in urls.py so you do not have to change anything if url path changes-->
     <hr>
