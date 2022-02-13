@@ -9,9 +9,10 @@
   <h4?>Hello {{request.user}}</h4>
   <a href="{% url 'logout' %}">Logout</a>
 
-  <a href="{% url 'updateProfile' %}">Update Profile</a>
+  <a href="{% url 'myProfile' %}">My Profile</a>
+  
 
-
+  <img src="{{request.user.profile_picture.url}}">
 
   {% else %}
   <a href="{% url 'login' %}">Login</a>

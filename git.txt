@@ -1,0 +1,91 @@
+commit 5ba83a8ad333d45101b82ac444f2d0e3e58913c1
+Author: Zakiyyah Ahmed <zaktech269@gmail.com>
+Date:   Thu Feb 3 21:42:19 2022 +0200
+
+    Created  REST api using function based views:
+    I have only created 2 endpoints at this stage.
+
+commit 8f59506f5fc7e8da0c2faaa8187537e3cb18befc
+Author: Zakiyyah Ahmed <zaktech269@gmail.com>
+Date:   Thu Feb 3 21:08:53 2022 +0200
+
+    Created API folder to begin creating the REST API using Django REST framework
+            new file:   social_network/snapp/api/__init__.py
+            new file:   social_network/snapp/api/serializers.py
+            new file:   social_network/snapp/api/urls.py
+            new file:   social_network/snapp/api/views.py
+
+commit 193c09d038ed664f92bdb347261c63da221a5be3
+Author: Zakiyyah Ahmed <zaktech269@gmail.com>
+Date:   Thu Feb 3 15:54:19 2022 +0200
+
+    Created a user profile page
+    Basic functionality - username
+    Created a user profile settings page
+
+commit d2efd9598b1901a6aa738de8bcb9f600e5815575
+Author: Zakiyyah Ahmed <zaktech269@gmail.com>
+Date:   Thu Feb 3 11:54:46 2022 +0200
+
+    Created user login , logout and registration functionality
+    Users can:
+    Users can create accounts
+    Users can log in and log out
+
+commit ce5f17a783227e97b1b97eaf99e1fef34b493e4d
+Author: Zakiyyah Ahmed <zaktech269@gmail.com>
+Date:   Wed Feb 2 19:46:15 2022 +0200
+
+    created requirements.txt file
+
+commit d20c5f013b962f24ea7d7e4bb9a46792b4596445
+Author: Zakiyyah Ahmed <48877866+zak92@users.noreply.github.com>
+Date:   Wed Feb 2 19:43:02 2022 +0200
+
+    Create README.md
+
+commit 5adee5bc73eb8e221a499e31289464c196672853
+Author: Zakiyyah Ahmed <zaktech269@gmail.com>
+Date:   Wed Feb 2 18:04:37 2022 +0200
+
+    Created the following models:
+    group
+    Message
+    
+    Created forms.py
+    
+    Created group_form.html - user creates a new group
+
+commit 0edd09634d0499eebfb264ee3546194a5b1d2491
+Author: Zakiyyah Ahmed <zaktech269@gmail.com>
+Date:   Wed Feb 2 16:54:11 2022 +0200
+
+    Created templates:
+    group.html
+    home.html
+    userHome.html
+    index.html
+    
+    Created views:
+     group,
+     home,
+     index,
+     userHome
+    
+    Added paths in snapp urls.py
+
+commit fa1c1a5508b55733d38363af1be9f5ab77e60d02
+Author: Zakiyyah Ahmed <zaktech269@gmail.com>
+Date:   Wed Feb 2 10:42:38 2022 +0200
+
+    Created superuser
+
+commit 0c647bb111e9ee76a1cf229c1c8a0783572a2c9f
+Author: Zakiyyah Ahmed <zaktech269@gmail.com>
+Date:   Wed Feb 2 10:24:02 2022 +0200
+
+    Created a virtual environment
+    Installed Django=3.0.3
+    Created requirements.txt
+    Initialized project
+    Created an html page - index.html

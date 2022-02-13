@@ -1,12 +1,13 @@
 from email import message
 from multiprocessing import context
+import profile
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
 from django.http import HttpResponse
-from django.contrib.auth.forms import UserCreationForm
+# from django.contrib.auth.forms import UserCreationForm
 from .models import *
 from .forms import *
 
@@ -43,14 +44,17 @@ def userLogout(request):
   return redirect('home')
 
 def userSignUp(request):
-  form = UserCreationForm()
+  form = MyUserCreationForm()
   if request.method == 'POST':
-     form = UserCreationForm(request.POST)  # pass indata that the user sent
+    
+     form = MyUserCreationForm(request.POST)  # pass indata that the user sent - 
      if form.is_valid(): # validate the data
       user = form.save(commit=False)  # save data and get user object and clean data
       user.username = user.username.lower() # username must be in lowercase
       user.save()
+      AppUser.objects.create(user=user)
       login(request, user) # log user in immediately
+     
       return redirect('home')
      else:
       messages.error(request, 'Error in user registration / sign up')
@@ -155,14 +159,34 @@ def deleteMessage(request, pk):
 
 @login_required(login_url='login')
 def updateProfile(request):
-  user = request.user
-  form = UserProfileForm(instance=user)
+  #user = request.user.appuser
+ 
+  #form = UserProfileForm(instance=user)
+  user_form = UpdateUserForm(instance=request.user)
+  profile_form = UpdateProfileForm(instance=request.user.appuser)
+
+
+  #profile_form = UpdateProfileForm(instance=user)
   if request.method == 'POST': # if user sent info
-    form = UserProfileForm(request.POST, instance=user)  # populated with the data that the user sent - update a room, do not create a new one
-    if form.is_valid(): # validate the data
-      form.save()
-      return redirect('user-profile', pk=user.id)
-  context = {'form': form}
+    user_form = UpdateUserForm(request.POST, request.FILES, instance=request.user)  # populated with the data that the user sent - update a room, do not create a new one
+    profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.appuser)
+    if user_form.is_valid() and profile_form.is_valid(): # validate the data
+      user_form.save()
+      profile_form.save()
+      return redirect('myProfile')
+  context = {'user_form': user_form, 'profile_form': profile_form}
   return render(request, 'snapp/user_profile_settings.html', context)
+
+@login_required(login_url='login')
+def myProfile(request):
+  user = request.user
+  #appuser = AppUser.objects.create(user=request.user)
+  #appuser = request.user.appuser
+ 
+  groups = user.group_set.all() #.order_by('-dateCreated') 
+  group_messages = user.message_set.all()
+ 
+  context = {'user':user,'groups':groups, 'group_messages': group_messages}
+  return render(request, 'snapp/user_profile.html', context)
 
 

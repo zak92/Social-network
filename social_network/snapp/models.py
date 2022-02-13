@@ -4,6 +4,16 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+class AppUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE) # maps to User table. User table automatically provided by Django
+    bio = models.TextField(max_length=500, blank=True, null=True)
+    profile_picture = models.ImageField(null=True, default="user.png")     # default image   
+    dateCreated = models.DateTimeField(auto_now_add=True, null=True)
+    def __unicode__(self):
+      return self.user  # username in User model
+    
+
+
 class Group(models.Model):
   groupCreator = models.ForeignKey(User, on_delete=models.CASCADE)
   name = models.CharField(max_length=200)
