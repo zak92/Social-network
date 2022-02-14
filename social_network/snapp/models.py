@@ -7,11 +7,28 @@ from django.contrib.auth.models import User
 class AppUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE) # maps to User table. User table automatically provided by Django
     bio = models.TextField(max_length=500, blank=True, null=True)
+    status = models.CharField(max_length=200, blank=True, null=True)
     profile_picture = models.ImageField(null=True, default="user.png")     # default image   
     dateCreated = models.DateTimeField(auto_now_add=True, null=True)
     def __unicode__(self):
       return self.user  # username in User model
+
+
     
+# class Gallery(models.Model):
+#   galleryOwner = models.ForeignKey(User, on_delete=models.CASCADE)
+#   def __unicode__(self):
+#     return self.galleryOwner
+
+class GalleryImage(models.Model):
+  owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+  image = models.ImageField(blank=True, null=True)
+  def __unicode__(self):
+    return self.owner
+  # lastUpdated = models.DateTimeField(auto_now=True) # automatic - last updated 
+  # dateCreated = models.DateTimeField(auto_now_add=True) # when it was first created - initial timestamp - will never change
+  # class Meta:
+  #   ordering = ['-lastUpdated', '-dateCreated'] # show the last created / updated group at the top of the page
 
 
 class Group(models.Model):

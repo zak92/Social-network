@@ -24,7 +24,7 @@ class UpdateUserForm(ModelForm):
 class UpdateProfileForm(ModelForm):
   class Meta:
     model = AppUser
-    fields = ['bio', 'profile_picture' ]
+    fields = ['bio', 'profile_picture', 'status']
 
 
 class UserForm(ModelForm):
@@ -32,4 +32,9 @@ class UserForm(ModelForm):
     model = User
     fields = ['username',  'email', 'password']
 
-
+class UploadImagesToGalleryForm(ModelForm):
+  image = forms.ImageField(required=False,widget=forms.ClearableFileInput(attrs={
+    'multiple': True}))
+  class Meta:
+    model = GalleryImage
+    fields = ['image']

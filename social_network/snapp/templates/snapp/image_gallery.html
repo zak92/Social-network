@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+<h1>Image Gallery</h1>
+
+{% if request.user == user %}
+<h2>Add images to your gallery</h2>
+<form method="POST" action="" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ gallery_form.as_p }}
+ 
+  
+  <input type="submit" value="Upload" />
+</form>
+{% endif %}
+
+{% if images.count > 0 %}
+  {% for image in images %}
+  <div>
+    <img src="{{image.image.url}}" alt="gallery image" width="400" height="400"/>
+  </div>
+  {% endfor %}
+{% endif %}
+{% endblock content %}

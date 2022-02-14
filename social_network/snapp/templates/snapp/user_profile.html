@@ -16,7 +16,19 @@
 
 
 
+<h2>Status</h2>
+<p>{{user.appuser.status}}</p>
 
+<div>
+  {% if request.user == user %}
+  <h3><a href="{% url 'imageGallery'%}">Visit Gallery</a></h3>
+  {% else %}
+  <h3><a href="{% url 'viewImageGallery' user %}">Visit Gallery</a></h3>
+  {% endif %}
+
+ 
+ 
+</div>
 <div>
   {% if request.user == user %}
   <a href="{% url 'updateProfile' %}">Update Profile</a>

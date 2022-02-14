@@ -189,4 +189,40 @@ def myProfile(request):
   context = {'user':user,'groups':groups, 'group_messages': group_messages}
   return render(request, 'snapp/user_profile.html', context)
 
+@login_required(login_url='login')
+def imageGallery(request):
+  user = request.user
+  images = user.galleryimage_set.all()
+ 
+  #images = GalleryImage.objects.all()
+  gallery_form = UploadImagesToGalleryForm() 
+  if request.method == 'POST': # if user sent info
+    gallery_form = UploadImagesToGalleryForm(request.POST, request.FILES, instance=user)
+    files = request.FILES.getlist('image')
+    if gallery_form.is_valid(): # validate the data
+      new_image = gallery_form.save(commit=False)
+      new_image.owner = request.user
+      new_image.save()
+      #GalleryImage.objects.create(galleryOwner=user, image=request.FILES.getlist('image'))
+#       #print(user)
+      for f in files:
+        # img = GalleryImage(image=f)
+        # img.save()
+        # new_image.image.add(img)
+        # new_image.save()
+        photo = GalleryImage.objects.create(owner=user, image=f)
+      gallery_form.save()
+      
+      return redirect('imageGallery')
+     
+  context = {'user':user, 'gallery_form':gallery_form, 'images':images}
+  return render(request, 'snapp/image_gallery.html', context)
+
+def viewImageGallery(request, pk):
+  user = User.objects.get(username=pk)
+  images = user.galleryimage_set.all()
+     
+  context = {'user':user, 'images':images}
+  return render(request, 'snapp/image_gallery.html', context)
+
 
