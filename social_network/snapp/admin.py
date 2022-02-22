@@ -8,3 +8,5 @@ admin.site.register(Message)
 admin.site.register(AppUser)
 # admin.site.register(Gallery)
 admin.site.register(GalleryImage)  
+admin.site.register(Contact)  
+

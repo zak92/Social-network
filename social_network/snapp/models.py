@@ -8,17 +8,65 @@ class AppUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE) # maps to User table. User table automatically provided by Django
     bio = models.TextField(max_length=500, blank=True, null=True)
     status = models.CharField(max_length=200, blank=True, null=True)
-    profile_picture = models.ImageField(null=True, default="user.png")     # default image   
+    profile_picture = models.ImageField(null=True, default="user.png")     # default image 
+    #friends = models.ManyToManyField(User, related_name='friends', blank=True) 
+    #contacts = models.ManyToManyField(User, related_name="contacts", blank=True)  # list of friends
     dateCreated = models.DateTimeField(auto_now_add=True, null=True)
     def __unicode__(self):
       return self.user  # username in User model
+ 
+# https://codingwithmitch.com/courses/real-time-chat-messenger/friend-system/
+class Contact(models.Model):
+
+	user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user", null=True)
+	contacts = models.ManyToManyField(User, related_name="contacts", blank=True)  # list of friends
+
+	def __str__(self):
+		return self.user.username
+
+	# def add_friend(self, account):
+	# 	"""
+	# 	Add a new friend.
+	# 	"""
+	# 	if not account in self.friends.all():
+	# 		self.friends.add(account)
+	# 		self.save()
+
+	# def remove_friend(self, account):
+	# 	"""
+	# 	Remove a friend.
+	# 	"""
+	# 	if account in self.friends.all():
+	# 		self.friends.remove(account)
+
+	# def unfriend(self, removee):
+	# 	"""
+	# 	Initiate the action of unfriending someone.
+	# 	"""
+	# 	remover_friends_list = self # person terminating the friendship
+
+	# 	# Remove friend from remover friend list
+	# 	remover_friends_list.remove_friend(removee)
+
+	# 	# Remove friend from removee friend list
+	# 	friends_list = Contact.objects.get(user=removee)
+	# 	friends_list.remove_friend(remover_friends_list.user)
 
 
-    
-# class Gallery(models.Model):
-#   galleryOwner = models.ForeignKey(User, on_delete=models.CASCADE)
-#   def __unicode__(self):
-#     return self.galleryOwner
+	# def is_mutual_friend(self, friend):
+	# 	"""
+	# 	Is this a friend?
+	# 	"""
+	# 	if friend in self.friends.all():
+	# 		return True
+	# 	return False
+
+
+
+
+
+	
+
 
 class GalleryImage(models.Model):
   owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)

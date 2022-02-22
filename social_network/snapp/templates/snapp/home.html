@@ -32,4 +32,36 @@
     {% endfor %}
 </div>
 
+<div>
+  <h2>Find Friends</h2>
+  <form method="GET" action="{% url 'home' %}">
+    {% csrf_token %}  
+    {{ form.as_p }} 
+    <input type="text"  name="f" placeholder="Find friends. . . "/>
+  </form>
+</div>
+
+
+
+<h2>People you may know</h2>
+{% for user in users %}
+<div> 
+  <img style="border-radius: 50%;" src="{{user.appuser.profile_picture.url}}" alt="profile picture" width="50" height="50"/>
+  <a href="{% url 'user-profile' user.appuser.id %}">@{{user.username}}</a>
+  <p>{{user.appuser.bio}}</p>
+  <!-- {% if request.user.is_authenticated %}
+  <div>
+    <form method="POST" action="">
+      {% csrf_token %}  
+      {{ form.as_p }}
+      <input type="hidden" name="user" value="user.appuser.id" readonly/>
+      <input type="submit" value="Add as Friend" />
+    </form>
+  </div>
+  {% endif %} -->
+  <hr>
+</div>
+ {% endfor %} 
+
+
 {% endblock content %}

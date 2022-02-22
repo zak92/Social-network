@@ -63,22 +63,46 @@ def userSignUp(request):
 
 # @login_required(login_url='login')
 def userProfile(request, pk):
+ 
   user = User.objects.get(id=pk)
+  current_user = request.user
+  first_contact = Contact.objects.get_or_create(
+  user=user
+  )
+  contact = Contact.objects.get(user=user)
+  contacts = contact.contacts.all()
+  print(user)
+
+  # print(current_user.id)
   groups = user.group_set.all() #.order_by('-dateCreated') 
   group_messages = user.message_set.all()
-  context = {'user': user, 'groups':groups, 'group_messages': group_messages}
+ 
+  if request.method == 'POST' and 'add' in request.POST: # if user sent info
+    active_user = Contact.objects.get(user=request.user)
+    active_user.contacts.add(user)
+    return redirect('user-profile', pk=current_user.id)
+    
+  if request.method == 'POST' and 'remove' in request.POST: # if user sent info
+    active_user = Contact.objects.get(user=request.user)
+    active_user.contacts.remove(user)
+    
+  context = {'user': user, 'groups':groups, 'group_messages': group_messages , 'contacts': contacts}
   return render(request, 'snapp/user_profile.html', context)
 
 def home(request):
   q = request.GET.get('q') if request.GET.get('q') != None else ''
-
   groups = Group.objects.filter(
      Q(name__icontains=q) |                                                                                # FIX VIEWS - REFER TO CODING EXERCISES
      Q(description__icontains=q)
-    ) # get all groups  .get .filter .exclude
-  # groups = Group.objects.filter(name__icontains=q)
+    ) 
+  
   group_count = groups.count()
-  context = {'groups': groups, 'group_count': group_count}
+  f =  request.GET.get('f') if request.GET.get('f') != None else ''
+  users = User.objects.filter(
+     Q(username__icontains=f)                                                                             # FIX VIEWS - REFER TO CODING EXERCISES
+    )
+  
+  context = {'groups': groups, 'group_count': group_count, 'users': users}
   return render(request, 'snapp/home.html', context)
 
 
@@ -87,6 +111,7 @@ def group(request, pk):
   group = Group.objects.get(id=pk)
   groupMessages = group.message_set.all().order_by('-dateCreated')   # )set -> many-to-many relation ; message -> Model name (lowercase) - give all children of that model - newest will be first
   members = group.members.all()
+
   if request.method == 'POST': # if user sent info
     message = Message.objects.create(
       user=request.user,
@@ -159,12 +184,12 @@ def deleteMessage(request, pk):
 
 @login_required(login_url='login')
 def updateProfile(request):
-  #user = request.user.appuser
  
+  #user = User.objects.get(id=pk)
   #form = UserProfileForm(instance=user)
   user_form = UpdateUserForm(instance=request.user)
   profile_form = UpdateProfileForm(instance=request.user.appuser)
-
+  current_user = request.user
 
   #profile_form = UpdateProfileForm(instance=user)
   if request.method == 'POST': # if user sent info
@@ -173,21 +198,21 @@ def updateProfile(request):
     if user_form.is_valid() and profile_form.is_valid(): # validate the data
       user_form.save()
       profile_form.save()
-      return redirect('myProfile')
+      return redirect('user-profile', pk=current_user.id)
   context = {'user_form': user_form, 'profile_form': profile_form}
   return render(request, 'snapp/user_profile_settings.html', context)
 
-@login_required(login_url='login')
-def myProfile(request):
-  user = request.user
-  #appuser = AppUser.objects.create(user=request.user)
-  #appuser = request.user.appuser
+# @login_required(login_url='login')
+# def myProfile(request):
+#   user = request.user
+#   #appuser = AppUser.objects.create(user=request.user)
+#   #appuser = request.user.appuser
+#   #friends = user.appuser.friends.all()
+#   groups = user.group_set.all() #.order_by('-dateCreated') 
+#   group_messages = user.message_set.all()
  
-  groups = user.group_set.all() #.order_by('-dateCreated') 
-  group_messages = user.message_set.all()
- 
-  context = {'user':user,'groups':groups, 'group_messages': group_messages}
-  return render(request, 'snapp/user_profile.html', context)
+#   context = {'user':user,'groups':groups, 'group_messages': group_messages}
+#   return render(request, 'snapp/user_profile.html', context)
 
 @login_required(login_url='login')
 def imageGallery(request):
