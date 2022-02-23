@@ -13,63 +13,25 @@ class AppUser(models.Model):
     #contacts = models.ManyToManyField(User, related_name="contacts", blank=True)  # list of friends
     dateCreated = models.DateTimeField(auto_now_add=True, null=True)
     def __unicode__(self):
-      return self.user  # username in User model
+      return self.user.username  # username in User model
  
 # https://codingwithmitch.com/courses/real-time-chat-messenger/friend-system/
 class Contact(models.Model):
+  user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="contacts", null=True)
+  contacts = models.ManyToManyField(User, related_name="contact", blank=True)  # list of friends
+  def __str__(self):
+    return self.user.username
+  def __str__(self):
+    return self.contacts.username
 
-	user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user", null=True)
-	contacts = models.ManyToManyField(User, related_name="contacts", blank=True)  # list of friends
-
-	def __str__(self):
-		return self.user.username
-
-	# def add_friend(self, account):
-	# 	"""
-	# 	Add a new friend.
-	# 	"""
-	# 	if not account in self.friends.all():
-	# 		self.friends.add(account)
-	# 		self.save()
-
-	# def remove_friend(self, account):
-	# 	"""
-	# 	Remove a friend.
-	# 	"""
-	# 	if account in self.friends.all():
-	# 		self.friends.remove(account)
-
-	# def unfriend(self, removee):
-	# 	"""
-	# 	Initiate the action of unfriending someone.
-	# 	"""
-	# 	remover_friends_list = self # person terminating the friendship
-
-	# 	# Remove friend from remover friend list
-	# 	remover_friends_list.remove_friend(removee)
-
-	# 	# Remove friend from removee friend list
-	# 	friends_list = Contact.objects.get(user=removee)
-	# 	friends_list.remove_friend(remover_friends_list.user)
-
-
-	# def is_mutual_friend(self, friend):
-	# 	"""
-	# 	Is this a friend?
-	# 	"""
-	# 	if friend in self.friends.all():
-	# 		return True
-	# 	return False
+  
 
 
 
-
-
-	
 
 
 class GalleryImage(models.Model):
-  owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+  owner = models.ForeignKey(User, related_name="gallery", on_delete=models.SET_NULL, null=True, blank=True)
   image = models.ImageField(blank=True, null=True)
   def __unicode__(self):
     return self.owner
