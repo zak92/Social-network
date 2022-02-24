@@ -1,3 +1,43 @@
+commit d461a214e6759d8c8446fe29cc8bee31f1472694
+Author: Zakiyyah Ahmed <zaktech269@gmail.com>
+Date:   Thu Feb 24 18:26:01 2022 +0200
+
+    Created Tests for rest_api:
+    * Serializer tests
+    * Endpoint tests
+
+commit 0cad36d5694847258592aa9e6527a5dc0c0f7ff4
+Author: Zakiyyah Ahmed <zaktech269@gmail.com>
+Date:   Wed Feb 23 22:39:12 2022 +0200
+
+    Separation of concerns:
+    * Created a new app - rest_api
+    * An appropriate REST interface for User data is provided
+    Created 4 api endpoints:
+    * User data
+    * User List
+    * Group List
+    * Group Data
+
+commit 4a93deff97b25c3eb0acd22a381913e5e45c7352
+Author: Zakiyyah Ahmed <zaktech269@gmail.com>
+Date:   Tue Feb 22 23:49:28 2022 +0200
+
+    Users can  search for other users and “add” them to their network of contacts or friends.
+    Users can view a list of their friends.
+
+commit 7398a17dcb8343f6a905ae15d8523fa3b37ccb0d
+Author: Zakiyyah Ahmed <zaktech269@gmail.com>
+Date:   Mon Feb 14 20:20:02 2022 +0200
+
+    Users can now add images to their gallery and see other users' galleries
+
+commit b4e9d4bd88b217ea315bc034ab13cd86a7d05173
+Author: Zakiyyah Ahmed <zaktech269@gmail.com>
+Date:   Mon Feb 14 00:06:12 2022 +0200
+
+    Completed user profile page
+
 commit 5ba83a8ad333d45101b82ac444f2d0e3e58913c1
 Author: Zakiyyah Ahmed <zaktech269@gmail.com>
 Date:   Thu Feb 3 21:42:19 2022 +0200

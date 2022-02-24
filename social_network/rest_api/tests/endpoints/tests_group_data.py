@@ -16,7 +16,7 @@ class GroupTest(APITestCase):
   def setUp(self):
     # populate test database with dummy data from model_factories.py - UserFactory
     self.group1 = GroupFactory()
-    self.good_url = reverse('group', kwargs={'name': 'Test'})
+    self.good_url = reverse('group_data', kwargs={'name': 'Test'})
     self.bad_url = '/api/group/X/'
    
   def tearDown(self):

@@ -26,8 +26,12 @@ class Contact(models.Model):
 
   
 
+
+
+
+
 class GalleryImage(models.Model):
-  owner = models.ForeignKey(User, related_name="gallery", on_delete=models.SET_NULL, null=True, blank=True)
+  owner = models.ForeignKey(User, related_name="gallery", on_delete=models.SET_NULL, null=True, blank=True)  #remove related_name t get gallery to work , but api won't work
   image = models.ImageField(blank=True, null=True)
   def __unicode__(self):
     return self.owner

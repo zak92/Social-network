@@ -217,7 +217,7 @@ def updateProfile(request):
 @login_required(login_url='login')
 def imageGallery(request):
   user = request.user
-  images = user.galleryimage_set.all()
+  images = user.gallery.all() # changed from galleryimage_set.all()
  
   #images = GalleryImage.objects.all()
   gallery_form = UploadImagesToGalleryForm() 
@@ -245,7 +245,7 @@ def imageGallery(request):
 
 def viewImageGallery(request, pk):
   user = User.objects.get(username=pk)
-  images = user.galleryimage_set.all()
+  images = user.gallery.all()  # changed from galleryimage_set.all()
      
   context = {'user':user, 'images':images}
   return render(request, 'snapp/image_gallery.html', context)
