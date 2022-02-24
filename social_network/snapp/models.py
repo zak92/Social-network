@@ -26,10 +26,6 @@ class Contact(models.Model):
 
   
 
-
-
-
-
 class GalleryImage(models.Model):
   owner = models.ForeignKey(User, related_name="gallery", on_delete=models.SET_NULL, null=True, blank=True)
   image = models.ImageField(blank=True, null=True)
