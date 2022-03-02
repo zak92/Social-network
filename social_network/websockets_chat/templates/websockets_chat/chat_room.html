@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1> Live Chat room: {{room_name}}</h1>
+
+
+<div id="messages"></div>
+
+<form id="form" action="">
+  {% csrf_token %}  <!-- prevent against malicious attacks -->
+  {{ form.as_p }} <!-- wraps p tag around every paragraph-->
+  <input id="input" type="text" size="100" name="message">
+  <input id="submit" type="button" value="Send">
+</form>
+
+
+{{ request.user.username|json_script:"user_username"}}
+{{ room_name|json_script:"room-name" }}
+
+<script>
+
+  const roomName = JSON.parse(document.getElementById('room-name').textContent);
+  const user_username = JSON.parse(document.getElementById('user_username').textContent);
+  console.log(roomName)
+  console.log(user_username)
+  const chatSocket = new WebSocket(
+      'ws://' + window.location.host + '/ws/websockets/' + roomName + '/'
+    );
+
+  chatSocket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    let messages = document.getElementById('messages')
+
+    messages.insertAdjacentHTML('beforeend', `<div>
+                        <p>${data.username} : ${data.message}</p>
+                    </div>`)
+  }
+
+  chatSocket.onclose = function(e) {
+              console.error('Chat socket closed unexpectedly');
+  };
+  
+  document.querySelector('#input').focus();
+  
+
+  document.querySelector('#submit').onclick = function(e) {
+      const messageInputDom = document.querySelector('#input');
+      const message = messageInputDom.value;
+      chatSocket.send(JSON.stringify({
+          'message': message,
+          'username': user_username
+      }));
+      messageInputDom.value = '';
+  };
+  let form = document.getElementById('form')
+        form.addEventListener('submit', (e)=> {
+            e.preventDefault()
+            let message = e.target.message.value 
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'username': user_username
+            }))
+            form.reset()
+        })
+
+ 
+
+  
+</script>
+{% endblock content %}

@@ -41,7 +41,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_api',
-   # 'channels',
+    'websockets_chat',
+    'channels',
 
 ]
 
@@ -85,6 +86,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'TEST': {
+            'NAME': os.path.join(BASE_DIR, 'db_test.sqlite3')
+        }
     }
 }
 
@@ -130,6 +134,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# websockets
+ASGI_APPLICATION = "social_network.routing.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+
+
 # user uploaded content destination path
 MEDIA_URL = '/images/'
 STATICFILES_DIRS =[

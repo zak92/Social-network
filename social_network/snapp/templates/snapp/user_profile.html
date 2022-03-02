@@ -76,14 +76,7 @@
         <li><a href="{% url 'user-profile' user.id %}">@{{user.username}}</a></li>
       </ul>
     </div>
-    <div>
-      <form method="POST" action="">
-        {% csrf_token %}  
-        {{ form.as_p }}
-      
-        <input type="submit" name="remove" value="Remove from contacts" />
-      </form>
-      </div>
+    
 
 
     {% endfor %}
@@ -102,23 +95,6 @@
 
     {% endif %}
     
-
-    <div>
-      <h2>Groups Joined</h2>
-      {% for message in group_messages %}
-      <div>
-      
-        <span>@{{message.group.groupCreator.username}}</span> 
-        
-        <h5>{{ message.group.id}} -- <a href="{% url 'group' message.group.id %}">{{message.group.name}}</a></h5>  <!-- href => Refers to name= in urls.py so you do not have to change anything if url path changes-->
-        <hr>
-       
-      </div>
-      {% endfor %}
-  
-      
-      </div>
-
   </div>
 </div>
 

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Choose a Live Chat Room</h1>
+<div>
+<h2>Enter Chat Room Name</h2>
+
+</div>
+
+<form onSubmit="return process();">
+  Chat Room: <input type="text" name="url" id="url">
+  <input type="submit" value="go">
+</form>
+
+<script>
+  console.log( window.location.host + '/websockets/' + document.getElementById("url").value + '/')
+  console.log(location.href)
+   function process()
+    {
+        var url =  document.getElementById("url").value + '/';
+        location.href = url;
+        console.log(url)
+        
+        return false;
+    }
+</script>
+{% endblock content %}
