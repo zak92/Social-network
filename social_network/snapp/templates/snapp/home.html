@@ -21,8 +21,8 @@
   <div>
     <div>
     {% if request.user == group.groupCreator %}
-    <a href="{% url 'updateGroup' group.id %}">Edit</a>
-    <a href="{% url 'deleteGroup' group.id %}">Delete</a>
+    <a href="{% url 'updateGroup' group.id %}">Edit Group</a>
+    <a href="{% url 'deleteGroup' group.id %}">Delete Group</a>
     {% endif %}
   </div>
     <a href="{% url 'user-profile' group.groupCreator.id %}">@{{group.groupCreator.username}}</a> 

@@ -61,7 +61,6 @@ def userSignUp(request):
   context = {'form': form}
   return render(request, 'snapp/index.html', context)
 
-# @login_required(login_url='login')
 def userProfile(request, pk):
  
   user = User.objects.get(id=pk)
