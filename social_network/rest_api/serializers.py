@@ -43,7 +43,10 @@ class UserSerializer(serializers.ModelSerializer):
     gallery = GalleryImageSerializer(many=True)
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'last_login', 'date_joined', 'appuser', 'gallery', 'contacts']
+        fields = [
+            'id', 'username', 'email', 'last_login', 'date_joined', 
+            'appuser', 'gallery', 'contacts'
+        ]
 
  
 

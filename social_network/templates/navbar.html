@@ -5,19 +5,22 @@
 
 <a href="{% url 'home' %}">Home</a>
 
+
   {% if request.user.is_authenticated %}
   <h4?>Hello {{request.user}}</h4>
   <a href="{% url 'logout' %}">Logout</a>
 
   <a href="{% url 'user-profile' request.user.id %}">My Profile</a>
   
+  <a href="{% url 'choose_room' %}">Live Chat Rooms</a>
 
-  <img src="{{request.user.profile_picture.url}}">
+ 
 
   {% else %}
   <a href="{% url 'login' %}">Login</a>
 
   {% endif %}
 
-  <a href="{% url 'choose_room' %}">Live Chat Rooms</a>
+
+  <a href="{% url 'signUp' %}">Sign Up</a>
 <hr>

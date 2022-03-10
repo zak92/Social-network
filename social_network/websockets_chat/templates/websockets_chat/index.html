@@ -8,7 +8,7 @@
 
 </div>
 
-<form onSubmit="return process();">
+<form action='' onsubmit="return process()">
   Chat Room: <input type="text" name="url" id="url">
   <input type="submit" value="go">
 </form>
@@ -18,11 +18,11 @@
   console.log(location.href)
    function process()
     {
-        var url =  document.getElementById("url").value + '/';
-        location.href = url;
-        console.log(url)
-        
-        return false;
-    }
+      var url =  document.getElementById("url").value + '/';
+      location.href = url;
+      console.log(url)
+
+      return false;
+      }
 </script>
 {% endblock content %}

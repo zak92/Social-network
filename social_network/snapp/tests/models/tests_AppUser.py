@@ -4,8 +4,7 @@ from django.urls import reverse
 from django.contrib.auth.models import AnonymousUser, User
 from ...models import AppUser 
 
-# https://www.section.io/engineering-education/django-unit-testing/#prerequisites
-# https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Testing
+
 class AppUserModelTest(TestCase):
 
   user = None
@@ -24,6 +23,20 @@ class AppUserModelTest(TestCase):
   def tearDown(self):
     User.objects.all().delete()
     AppUser.objects.all().delete()
+
+  # check that the model has the correct field names
+  def test_ModelHasCorrectFieldNames(self):
+    appuser = AppUser.objects.get(id=1)
+    field_label_user = appuser._meta.get_field('user').verbose_name
+    field_label_bio = appuser._meta.get_field('bio').verbose_name
+    field_label_status = appuser._meta.get_field('status').verbose_name
+    field_label_profile_picture = appuser._meta.get_field('profile_picture').verbose_name
+    field_label_dateCreated = appuser._meta.get_field('dateCreated').verbose_name
+    self.assertEqual(field_label_user, 'user')
+    self.assertEqual(field_label_bio, 'bio')
+    self.assertEqual(field_label_status, 'status')
+    self.assertEqual(field_label_profile_picture, 'profile picture')
+    self.assertEqual(field_label_dateCreated, 'dateCreated')
 
 # check that the model has correct field values
   def test_ModelHasCorrectFieldValues(self):
@@ -44,6 +57,7 @@ class AppUserModelTest(TestCase):
     max_length = appuser._meta.get_field('status').max_length
     self.assertEqual(max_length, 200)
 
+  # test the model methods
   def test_ModelMethod(self):
      appuser = AppUser.objects.get(id=1)
      expected_object = self.user.username

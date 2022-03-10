@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
 from django.http import HttpResponse
-# from django.contrib.auth.forms import UserCreationForm
 from .models import *
 from .forms import *
 
@@ -17,18 +16,15 @@ def userLogin(request):
   page = 'login'
   if request.user.is_authenticated:  # cant go to login page
     return redirect('home')
-
   if request.method == 'POST': # if user sent info
     username = request.POST.get('username').lower()  # populated with the data that the user sent
     password = request.POST.get('password')
-    
     try:
       user = User.objects.get(username=username)
     except:
       messages.error(request, 'User does not exist - PLease create an account')  # flash messages
 
     user = authenticate(request, username=username, password=password) # authenticate user - return user object
-
     if user is not None:
       login(request, user) # activate session - user is logged in
       return redirect('home')
@@ -46,15 +42,14 @@ def userLogout(request):
 def userSignUp(request):
   form = MyUserCreationForm()
   if request.method == 'POST':
-    
-     form = MyUserCreationForm(request.POST)  # pass indata that the user sent - 
+     # pass in data that the user sent 
+     form = MyUserCreationForm(request.POST) 
      if form.is_valid(): # validate the data
       user = form.save(commit=False)  # save data and get user object and clean data
       user.username = user.username.lower() # username must be in lowercase
       user.save()
       AppUser.objects.create(user=user)
       login(request, user) # log user in immediately
-     
       return redirect('home')
      else:
       messages.error(request, 'Error in user registration / sign up')
@@ -62,53 +57,55 @@ def userSignUp(request):
   return render(request, 'snapp/index.html', context)
 
 def userProfile(request, pk):
- 
+  # get user object
   user = User.objects.get(id=pk)
   current_user = request.user
-  first_contact = Contact.objects.get_or_create(
-  user=user
-  )
+  # get or create a contacts instance in the contact model
+  first_contact = Contact.objects.get_or_create(user=user)
+  # get all the user's contacts
   contact = Contact.objects.get(user=user)
   contacts = contact.contacts.all()
-  print(user)
-
-  # print(current_user.id)
-  groups = user.group_set.all() #.order_by('-dateCreated') 
+  # get all groups created by the user
+  groups = user.group_set.all() 
   group_messages = user.message_set.all()
  
-  if request.method == 'POST' and 'add' in request.POST: # if user sent info
+  if request.method == 'POST' and 'add' in request.POST: 
+    # add contact to user profile page
     active_user = Contact.objects.get(user=request.user)
     active_user.contacts.add(user)
     return redirect('user-profile', pk=current_user.id)
     
-  if request.method == 'POST' and 'remove' in request.POST: # if user sent info
-    active_user = Contact.objects.get(user=request.user)
-    active_user.contacts.remove(user)
-    
-  context = {'user': user, 'groups':groups, 'group_messages': group_messages , 'contacts': contacts}
+  context = {
+          'user': user, 
+          'groups':groups, 
+          'group_messages': group_messages , 
+          'contacts': contacts 
+        }
   return render(request, 'snapp/user_profile.html', context)
 
+
+# render the home page
 def home(request):
   q = request.GET.get('q') if request.GET.get('q') != None else ''
+  # Search for groups
   groups = Group.objects.filter(
-     Q(name__icontains=q) |                                                                                # FIX VIEWS - REFER TO CODING EXERCISES
+     Q(name__icontains=q) |                                                                              
      Q(description__icontains=q)
     ) 
-  
   group_count = groups.count()
+  # Search for other users
   f =  request.GET.get('f') if request.GET.get('f') != None else ''
   users = User.objects.filter(
-     Q(username__icontains=f)                                                                             # FIX VIEWS - REFER TO CODING EXERCISES
+     Q(username__icontains=f)                                                                             
     )
   
   context = {'groups': groups, 'group_count': group_count, 'users': users}
   return render(request, 'snapp/home.html', context)
 
 
-
 def group(request, pk):
   group = Group.objects.get(id=pk)
-  groupMessages = group.message_set.all().order_by('-dateCreated')   # )set -> many-to-many relation ; message -> Model name (lowercase) - give all children of that model - newest will be first
+  groupMessages = group.message_set.all().order_by('-dateCreated')   
   members = group.members.all()
 
   if request.method == 'POST': # if user sent info
@@ -144,12 +141,10 @@ def createGroup(request):
 def updateGroup(request, pk):
   group = Group.objects.get(id=pk)
   form = GroupForm(instance=group) # the form will be prefilled with data about the group
-
   if request.user != group.groupCreator:  # if user is not the creator of room - they cannot update it
     return HttpResponse('You cannot update since you did not create the group')
-
   if request.method == 'POST': # if user sent info
-    form = GroupForm(request.POST,instance=group)  # populated with the data that the user sent - update a room, do not create a new one
+    form = GroupForm(request.POST,instance=group)  # populated with the data that the user sent - update a group, do not create a new one
     if form.is_valid(): # validate the data
       form.save()
       return redirect('home')
@@ -159,11 +154,10 @@ def updateGroup(request, pk):
 @login_required(login_url='login')
 def deleteGroup(request, pk):
   group = Group.objects.get(id=pk)
-
   if request.user != group.groupCreator:  # if user is not the creator of room - they cannot delete it
     return HttpResponse('You cannot delete since you did not create the group')
-
   if request.method == 'POST':
+    # delete group
     group.delete()
     return redirect('home')
   return render(request, 'snapp/delete.html', {'obj': group})
@@ -172,10 +166,8 @@ def deleteGroup(request, pk):
 @login_required(login_url='login')
 def deleteMessage(request, pk):
   message = Message.objects.get(id=pk)
-
   if request.user != message.user:  # if user is not the creator of message - they cannot delete it
     return HttpResponse('You cannot delete since you did not create the message')
-
   if request.method == 'POST':
     message.delete()
     return redirect('home')
@@ -183,16 +175,13 @@ def deleteMessage(request, pk):
 
 @login_required(login_url='login')
 def updateProfile(request):
- 
-  #user = User.objects.get(id=pk)
-  #form = UserProfileForm(instance=user)
+  # get from data
   user_form = UpdateUserForm(instance=request.user)
   profile_form = UpdateProfileForm(instance=request.user.appuser)
   current_user = request.user
-
-  #profile_form = UpdateProfileForm(instance=user)
   if request.method == 'POST': # if user sent info
-    user_form = UpdateUserForm(request.POST, request.FILES, instance=request.user)  # populated with the data that the user sent - update a room, do not create a new one
+    # populated with the data that the user sent - update a profile, do not create a new one
+    user_form = UpdateUserForm(request.POST, request.FILES, instance=request.user)  
     profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.appuser)
     if user_form.is_valid() and profile_form.is_valid(): # validate the data
       user_form.save()
@@ -201,24 +190,10 @@ def updateProfile(request):
   context = {'user_form': user_form, 'profile_form': profile_form}
   return render(request, 'snapp/user_profile_settings.html', context)
 
-# @login_required(login_url='login')
-# def myProfile(request):
-#   user = request.user
-#   #appuser = AppUser.objects.create(user=request.user)
-#   #appuser = request.user.appuser
-#   #friends = user.appuser.friends.all()
-#   groups = user.group_set.all() #.order_by('-dateCreated') 
-#   group_messages = user.message_set.all()
- 
-#   context = {'user':user,'groups':groups, 'group_messages': group_messages}
-#   return render(request, 'snapp/user_profile.html', context)
-
 @login_required(login_url='login')
 def imageGallery(request):
   user = request.user
-  images = user.gallery.all() # changed from galleryimage_set.all()
- 
-  #images = GalleryImage.objects.all()
+  images = user.gallery.all() 
   gallery_form = UploadImagesToGalleryForm() 
   if request.method == 'POST': # if user sent info
     gallery_form = UploadImagesToGalleryForm(request.POST, request.FILES, instance=user)
@@ -227,25 +202,19 @@ def imageGallery(request):
       new_image = gallery_form.save(commit=False)
       new_image.owner = request.user
       new_image.save()
-      #GalleryImage.objects.create(galleryOwner=user, image=request.FILES.getlist('image'))
-#       #print(user)
       for f in files:
-        # img = GalleryImage(image=f)
-        # img.save()
-        # new_image.image.add(img)
-        # new_image.save()
         photo = GalleryImage.objects.create(owner=user, image=f)
       gallery_form.save()
-      
       return redirect('imageGallery')
      
-  context = {'user':user, 'gallery_form':gallery_form, 'images':images}
+  context = {'user':user, 'gallery_form':gallery_form, 'images': images}
   return render(request, 'snapp/image_gallery.html', context)
 
 def viewImageGallery(request, pk):
+  # get user instance
   user = User.objects.get(username=pk)
-  images = user.gallery.all()  # changed from galleryimage_set.all()
-     
+  # show all images of the particular user
+  images = user.gallery.all()
   context = {'user':user, 'images':images}
   return render(request, 'snapp/image_gallery.html', context)
 
